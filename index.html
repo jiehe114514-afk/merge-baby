@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>合成冯天乐他爷爷</title>
+<title>冯天乐没码</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
@@ -49,20 +49,21 @@ canvas{width:100%;height:100%;border-radius:26px;background:linear-gradient(#fff
  <div id="list"></div>
  <div id="ft"><span>只取最近 20 次提交，成绩会被后来的人挤下去</span><button id="rf">刷新</button></div>
 </div></div>
-<div class="ov" id="gov"><div id="go"><h2>冯天乐没马</h2><div id="fs"></div><button onclick="reset()">蒙天乐没嘛</button><button style="background:#e0951d" onclick="gov.style.display='none';showLB()">排行榜</button></div></div>
+<div class="ov" id="gov"><div id="go"><h2>游戏结束</h2><div id="fs"></div><button onclick="reset()">再来一局</button><button style="background:#e0951d" onclick="gov.style.display='none';showLB()">排行榜</button></div></div>
+<div class="ov" id="pop"><div style="background:#fff;border-radius:28px;padding:30px 28px;text-align:center;max-width:320px"><div style="font-size:30px;font-weight:700;color:#e0951d;word-break:break-all">冯天乐没码</div><button style="margin-top:20px;padding:10px 32px;border:0;border-radius:16px;background:#e8505b;color:#fff;font-size:17px" onclick="document.getElementById('pop').style.display='none';paused=false">确定</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <script>
 const {Engine,World,Bodies,Events}=Matter;
-const W=336,H=560,WALL=5,DROPY=57,LINE=113;
+const W=336,H=560,WALL=5,DROPY=57,LINE=250;
 const R=[14,19,26,34,41,48,60];
 const NAMES=['蛋娃','小鸡','老鼠','公鸡','兔子','小狗','大奶娃'];
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 const dpr=Math.min(devicePixelRatio||1,3);cv.width=W*dpr;cv.height=H*dpr;
 const $=id=>document.getElementById(id);
-let eng,score=0,best=0,over=false,cur,next,px=W*.4,cool=0,snd=true,parts=[],saved=false;
+let paused=false,hit1k=false,eng,score=0,best=0,over=false,cur,next,px=W*.4,cool=0,snd=true,parts=[],saved=false;
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 best=ls.get('mb3_best',0);$('bs').textContent=best;$('nick').value=ls.get('mb3_nick','默认用户');
-const WT=[30,26,19,12,8,5];
+const WT=[6,8,12,20,26,28];
 const rnd=()=>{let t=Math.random()*100;for(let i=0;i<6;i++){t-=WT[i];if(t<0)return i}return 0};
 // ---------- sprites ----------
 const Y='#f6d94b',YL='#fdea85',YD='#e3b52f',CR='#f7ebc4',OR='#f3b049',RD='#d8392e',BR='#85702f',PK='#f3b7a3';
@@ -105,23 +106,23 @@ function reset(){
  const me=eng=Engine.create();eng.gravity.y=1.2;
  const o={isStatic:true,friction:.2};
  World.add(eng.world,[Bodies.rectangle(W/2,H+30,W+200,60,o),Bodies.rectangle(WALL-30,H/2,60,H*3,o),Bodies.rectangle(W-WALL+30,H/2,60,H*3,o)]);
- score=0;over=false;saved=false;$('sc').textContent=0;$('gov').style.display='none';cur=rnd();next=rnd();cool=0;parts=[];
+ score=0;over=false;saved=false;hit1k=false;paused=false;$('pop').style.display='none';$('sc').textContent=0;$('gov').style.display='none';cur=rnd();next=rnd();cool=0;parts=[];
  Events.on(eng,'collisionStart',e=>{for(const p of e.pairs){const a=p.bodyA,b=p.bodyB;
   const v=Math.hypot(a.velocity.x-b.velocity.x,a.velocity.y-b.velocity.y);
   if(v>1.2){for(const q of[a,b])if(q.lv!==undefined)q.kv+=Math.min(.16,v*.018);const n=performance.now();if(v>2.5&&n-lastHit>60){lastHit=n;sfx.hit(v)}}
-  if(a.lv!==undefined&&a.lv===b.lv&&!a.dead&&!b.dead){a.dead=b.dead=true;
+  if(a.lv!==undefined&&a.lv===b.lv&&a.lv<R.length-1&&!a.dead&&!b.dead){a.dead=b.dead=true;
    const x=(a.position.x+b.position.x)/2,y=(a.position.y+b.position.y)/2,l=a.lv;
    setTimeout(()=>{if(eng!==me)return;World.remove(eng.world,[a,b]);
     if(l+1<R.length){const n=mk(l+1,x,y,.3);n.kv=-.12;World.add(eng.world,n);sfx.merge(l+1)}else sfx.fin();
     add((l+1)*(l+2)*2+(l+1>=R.length?300:0));
     for(let i=0;i<12;i++)parts.push({x,y,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7-1,t:1})},0)}}});
 }
-function add(n){score+=n;$('sc').textContent=score;if(score>best){best=score;$('bs').textContent=best;ls.set('mb3_best',best)}}
+function add(n){score+=n;$('sc').textContent=score;if(score>=500&&!hit1k){hit1k=true;paused=true;$('pop').style.display='flex'}if(score>best){best=score;$('bs').textContent=best;ls.set('mb3_best',best)}}
 function clampX(){px=Math.max(WALL+R[cur],Math.min(W-WALL-R[cur],px))}
 function pos(e){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(x){}}if(ac&&ac.state==='suspended')ac.resume();const r=cv.getBoundingClientRect();px=(e.clientX-r.left)/r.width*W;clampX()}
 cv.addEventListener('pointerdown',pos);cv.addEventListener('pointermove',pos);
 cv.addEventListener('pointerup',e=>{pos(e);drop()});
-function drop(){if(over||cool>0)return;const b=mk(cur,px,DROPY,.8);b.kv=-.08;World.add(eng.world,b);sfx.drop();cur=next;next=rnd();cool=32;clampX()}
+function drop(){if(over||paused||cool>0)return;const b=mk(cur,px,DROPY,.8);b.kv=-.08;World.add(eng.world,b);sfx.drop();cur=next;next=rnd();cool=20;clampX()}
 $('re').onclick=reset;$('sd').onclick=()=>{snd=!snd;$('sd').textContent=snd?'🔊':'🔇'};
 // ---------- leaderboard (local) ----------
 function submit(){saved=true;if(score<=0)return;const a=ls.get('mb3_board',[]);a.push({n:$('nick').value.trim()||'默认用户',s:score});ls.set('mb3_board',a.slice(-20))}
@@ -149,9 +150,9 @@ function draw(t){
 }
 function check(dt){const now=performance.now();let lose=false;
  for(const b of eng.world.bodies){if(b.lv===undefined||b.dead)continue;
-  if(now-b.born>1500&&b.position.y-R[b.lv]<LINE){b.over+=dt;if(b.over>2000)lose=true}else b.over=0}
- if(lose&&!over){over=true;submit();sfx.end();$('fs').textContent='得分 '+score+'　最高冯添乐爷爷 '+best;$('gov').style.display='flex'}}
+  if(now-b.born>1500&&b.position.y-R[b.lv]<LINE){b.over+=dt;if(b.over>500)lose=true}else b.over=0}
+ if(lose&&!over){over=true;submit();sfx.end();$('fs').textContent='得分 '+score+'　最高 '+best;$('gov').style.display='flex'}}
 let last=performance.now();
-function loop(t){const dt=Math.min(32,t-last);last=t;if(!over)Engine.update(eng,1000/60,1);if(cool>0)cool--;check(dt);draw(t);requestAnimationFrame(loop)}
+function loop(t){const dt=Math.min(32,t-last);last=t;if(!over&&!paused){Engine.update(eng,1000/60,1);if(cool>0)cool--;check(dt)}draw(t);requestAnimationFrame(loop)}
 reset();requestAnimationFrame(loop);
 </script></body></html>
