@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>合成冯天乐他爷爷</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(#fbe9c6,#fdecd8 45%,#f4d8dc);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#4a2e22;display:flex;flex-direction:column;align-items:center;touch-action:none;overflow:hidden}
+#bar{width:min(96vw,480px);margin:14px 0 12px;padding:10px 12px;border-radius:32px;background:rgba(255,255,255,.72);display:flex;gap:8px;box-shadow:0 6px 18px #c9a77d33;flex:none}
+.box{background:#fffdfa;border-radius:20px;padding:8px 14px;flex:1.84;min-width:0;box-shadow:0 2px 8px #0000000a}
+.box small{display:block;font-size:12px;color:#a98b78;letter-spacing:1px}
+.box b{font-size:29px;line-height:1.1}
+#bsb b{color:#e0951d}
+.btn{flex:1;display:flex;align-items:center;justify-content:center;font-size:25px;background:#fffdfa;border-radius:20px;box-shadow:0 2px 8px #0000000a;cursor:pointer}
+#re{flex:1.56;background:linear-gradient(135deg,#ff9078,#e84f5a);color:#fff;font-size:17px;font-weight:700;box-shadow:0 4px 10px #e8505b66;gap:6px}
+#wrap{flex:1;min-height:0;display:flex;justify-content:center;width:100%;padding:0 3vw 14px}
+#frame{height:100%;aspect-ratio:1016/1670;max-width:100%;padding:1.8%;border-radius:36px;background:rgba(255,255,255,.45);box-shadow:0 0 0 2px #ebe1da inset,0 6px 20px #c9a77d33}
+canvas{width:100%;height:100%;border-radius:26px;background:linear-gradient(#fffefd,#fdf1df 40%,#ffe8cf);display:block}
+.ov{position:fixed;inset:0;background:#5a3a2a99;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:9;padding:16px}
+#lb{background:#fdf8f2;border-radius:34px;width:min(100%,440px);padding:20px 18px 18px;max-height:92%;display:flex;flex-direction:column}
+#lb h3{margin:0;font-size:24px;display:flex;align-items:center;gap:10px;flex:1}
+.hr{display:flex;align-items:center;margin-bottom:14px}
+#x{width:44px;height:44px;border-radius:50%;background:#ece6e2;display:flex;align-items:center;justify-content:center;font-size:20px;color:#7a6a60}
+#nk{display:flex;align-items:center;gap:10px;background:#fdf1e0;border:1.5px solid #f2dfc4;border-radius:20px;padding:8px 10px;margin-bottom:14px;color:#9a7a64}
+#nk input{flex:1;min-width:0;border:1.5px solid #f0d9b8;border-radius:16px;padding:10px;font-size:19px;text-align:center;color:#6a4a38;background:#fff;outline:0;user-select:text}
+#list{overflow:auto;flex:1;min-height:120px;display:flex;flex-direction:column;gap:8px}
+.r{display:flex;align-items:center;padding:12px 14px;border-radius:18px;background:#fff;font-size:18px;box-shadow:0 2px 6px #0000000a}
+.r i{width:44px;font-style:normal;font-weight:700;color:#8a6a58;text-align:center;margin-right:14px}
+.r span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.r b{color:#f26b6b;font-size:22px}
+.r1{background:linear-gradient(90deg,#fdf0b8,#fde9a0)}.r2{background:linear-gradient(90deg,#f4f4fa,#e8eaf3)}.r3{background:linear-gradient(90deg,#fcece0,#f7dcc4)}
+.r1 i,.r2 i,.r3 i{font-size:26px}
+#ft{display:flex;align-items:center;justify-content:space-between;margin-top:12px;color:#a08a7a;font-size:14px;gap:10px}
+#ft button{border:0;background:#fff;border-radius:20px;padding:16px 26px;font-size:18px;font-weight:700;color:#5a3a2a;box-shadow:0 2px 8px #0000001a}
+#go{background:#fff;border-radius:26px;padding:26px 36px;text-align:center}
+#go h2{margin:0 0 6px}#go button{margin:14px 5px 0;padding:10px 24px;border:0;border-radius:14px;background:#e8505b;color:#fff;font-size:17px}
+</style></head><body>
+<div id="bar">
+ <div class="box"><small>分数</small><b id="sc">0</b></div>
+ <div class="box" id="bsb"><small>最高分</small><b id="bs">0</b></div>
+ <div class="btn" id="tr">🏆</div><div class="btn" id="sd">🔊</div>
+ <div class="btn" id="re"><span style="font-weight:400">↻</span>重开</div>
+</div>
+<div id="wrap"><div id="frame"><canvas id="cv"></canvas></div></div>
+<div class="ov" id="lbo"><div id="lb">
+ <div class="hr"><h3>🏆 最近高手榜</h3><div id="x">✕</div></div>
+ <div id="nk"><span>我的昵称</span><input id="nick" maxlength="8" value="默认用户"></div>
+ <div id="list"></div>
+ <div id="ft"><span>只取最近 20 次提交，成绩会被后来的人挤下去</span><button id="rf">刷新</button></div>
+</div></div>
+<div class="ov" id="gov"><div id="go"><h2>冯天乐没马</h2><div id="fs"></div><button onclick="reset()">蒙天乐没嘛</button><button style="background:#e0951d" onclick="gov.style.display='none';showLB()">排行榜</button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script>
+const {Engine,World,Bodies,Events}=Matter;
+const W=336,H=560,WALL=5,DROPY=57,LINE=113;
+const R=[14,19,26,34,41,48,60];
+const NAMES=['蛋娃','小鸡','老鼠','公鸡','兔子','小狗','大奶娃'];
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+const dpr=Math.min(devicePixelRatio||1,3);cv.width=W*dpr;cv.height=H*dpr;
+const $=id=>document.getElementById(id);
+let eng,score=0,best=0,over=false,cur,next,px=W*.4,cool=0,snd=true,parts=[],saved=false;
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+best=ls.get('mb3_best',0);$('bs').textContent=best;$('nick').value=ls.get('mb3_nick','默认用户');
+const WT=[30,26,19,12,8,5];
+const rnd=()=>{let t=Math.random()*100;for(let i=0;i<6;i++){t-=WT[i];if(t<0)return i}return 0};
+// ---------- sprites ----------
+const Y='#f6d94b',YL='#fdea85',YD='#e3b52f',CR='#f7ebc4',OR='#f3b049',RD='#d8392e',BR='#85702f',PK='#f3b7a3';
+function E(x,y,a,b,c,rot){ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(x,y,a,b,rot||0,0,7);ctx.fill()}
+function pear(w,t,b){const g=ctx.createLinearGradient(0,t,0,b);g.addColorStop(0,YL);g.addColorStop(.55,Y);g.addColorStop(1,YD);ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,t);
+ ctx.bezierCurveTo(w*.7,t,w*.95,b*.15,w,b*.5);ctx.bezierCurveTo(w*1.02,b*.9,w*.5,b,0,b);ctx.bezierCurveTo(-w*.5,b,-w*1.02,b*.9,-w,b*.5);ctx.bezierCurveTo(-w*.95,b*.15,-w*.7,t,0,t);ctx.fill()}
+function eye(x,y,s){E(x,y,s,s*1.1,'#86bd48');E(x,y+s*.05,s*.62,s*.72,'#141c0a');E(x-s*.2,y-s*.25,s*.22,s*.22,'#fff')}
+function eyes(x,y,s){eye(-x,y,s);eye(x,y,s)}
+function smile(y,w){ctx.strokeStyle='#8a6a2a';ctx.lineWidth=.035;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-w,y);ctx.quadraticCurveTo(0,y+w*.7,w,y);ctx.stroke()}
+function blush(y){E(-.5,y,.16,.1,'rgba(255,130,100,.35)');E(.5,y,.16,.1,'rgba(255,130,100,.35)')}
+function feet(y,c){E(-.32,y,.17,.08,c||OR);E(.32,y,.17,.08,c||OR)}
+const S=[
+()=>{pear(.8,-.72,.86);eyes(.25,-.18,.085);smile(.0,.08);blush(.05)},
+()=>{E(-.8,.2,.16,.32,YD,.25);E(.8,.2,.16,.32,YD,-.25);pear(.74,-.88,.92);feet(.92);eyes(.24,-.42,.08);smile(-.25,.07);blush(-.12)},
+()=>{ctx.strokeStyle=YD;ctx.lineWidth=.07;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(.6,.8);ctx.bezierCurveTo(1.1,.8,1.05,.3,.9,.25);ctx.stroke();
+ for(const k of[-1,1]){E(k*.6,-.62,.34,.34,YL);E(k*.6,-.62,.2,.2,PK)}pear(.74,-.78,.92);feet(.92);eyes(.25,-.3,.08);E(0,-.12,.07,.05,'#e58b86');blush(-.05)},
+()=>{for(const a of[-.9,-.55,-.2]){E(-.78,-.05,.2,.6,a==-.55?YD:Y,a)}pear(.68,-.62,.92);feet(.94,RD);
+ for(const x of[-.16,0,.16])E(x,-.66,.11,.16,RD);E(.04,-.3,.15,.09,OR);E(.04,-.12,.07,.12,RD);eyes(.26,-.42,.075)},
+()=>{for(const k of[-1,1]){E(k*.26,-.8,.14,.44,YL,k*.1);E(k*.26,-.76,.07,.32,PK,k*.1)}pear(.7,-.72,.92);E(0,.5,.42,.36,CR);feet(.94);eyes(.25,-.4,.08);E(0,-.22,.07,.05,'#e58b86');smile(-.12,.1)},
+()=>{for(const k of[-1,1])E(k*.78,-.3,.2,.38,BR,k*-.35);pear(.8,-.8,.92);E(0,.0,.4,.3,'#f0d66a');E(0,.1,.24,.2,'#2b1812');E(0,.18,.12,.07,'#e46a6a');
+ ctx.strokeStyle='#2b1a10';ctx.lineWidth=.07;ctx.lineCap='round';for(const k of[-1,1]){ctx.beginPath();ctx.arc(k*.32,-.38,.12,3.4,6.0);ctx.stroke()}E(0,-.12,.1,.07,'#4a3a1a');feet(.94)},
+()=>{pear(.84,-1.0,1.0);E(0,.52,.58,.42,CR);const g=ctx.createLinearGradient(0,.5,0,.98);g.addColorStop(0,'rgba(247,176,73,0)');g.addColorStop(1,'rgba(247,176,73,.9)');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(0,.55,.6,.44,0,0,7);ctx.fill();
+ ctx.strokeStyle=Y;ctx.lineWidth=.26;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-.62,.0);ctx.bezierCurveTo(-.5,.5,.1,.45,.5,.32);ctx.moveTo(.62,.0);ctx.bezierCurveTo(.5,.55,-.1,.5,-.5,.36);ctx.stroke();
+ ctx.strokeStyle='rgba(180,130,20,.35)';ctx.lineWidth=.025;ctx.beginPath();ctx.moveTo(-.55,.3);ctx.lineTo(.5,.4);ctx.stroke();
+ E(.5,.32,.12,.08,'#9b8545');E(-.5,.36,.12,.08,'#9b8545');eyes(.22,-.58,.075);smile(-.4,.09)}];
+function sprite(l,x,y,ang,sx,sy){ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.scale(R[l]*sx,R[l]*sy);S[l]();ctx.restore()}
+// ---------- sound ----------
+let ac,lastHit=0;
+function tone(f,d,type,v,sl,delay){if(!snd||!ac)return;try{const t=ac.currentTime+(delay||0),o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(sl)o.frequency.exponentialRampToValueAtTime(f*sl,t+d);g.gain.setValueAtTime(v||.15,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
+const NOTE=[523,587,659,784,880,988,1175];
+const sfx={drop(){tone(220,.14,'sine',.22,.5);tone(1000,.04,'triangle',.05,.6)},
+ hit(v){tone(130+Math.random()*30,.09,'sine',Math.min(.22,v*.025),.6)},
+ merge(l){const f=NOTE[Math.min(l,6)];tone(f,.2,'triangle',.2,1.4);tone(f*1.5,.28,'sine',.12,1,.07);tone(f*.5,.12,'sine',.15,.7)},
+ fin(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,.3,'triangle',.18,1,i*.09))},
+ end(){[392,330,262,196].forEach((f,i)=>tone(f,.3,'sawtooth',.1,.9,i*.16))}};
+// ---------- game ----------
+function mk(l,x,y,s){const b=Bodies.circle(x,y,R[l]*.92,{restitution:.18,friction:.35,frictionAir:.002,density:.001});b.lv=l;b.born=performance.now();b.s=s;b.sv=0;b.k=0;b.kv=0;b.over=0;return b}
+function reset(){
+ if(!over&&score>0&&!saved)submit();
+ const me=eng=Engine.create();eng.gravity.y=1.2;
+ const o={isStatic:true,friction:.2};
+ World.add(eng.world,[Bodies.rectangle(W/2,H+30,W+200,60,o),Bodies.rectangle(WALL-30,H/2,60,H*3,o),Bodies.rectangle(W-WALL+30,H/2,60,H*3,o)]);
+ score=0;over=false;saved=false;$('sc').textContent=0;$('gov').style.display='none';cur=rnd();next=rnd();cool=0;parts=[];
+ Events.on(eng,'collisionStart',e=>{for(const p of e.pairs){const a=p.bodyA,b=p.bodyB;
+  const v=Math.hypot(a.velocity.x-b.velocity.x,a.velocity.y-b.velocity.y);
+  if(v>1.2){for(const q of[a,b])if(q.lv!==undefined)q.kv+=Math.min(.16,v*.018);const n=performance.now();if(v>2.5&&n-lastHit>60){lastHit=n;sfx.hit(v)}}
+  if(a.lv!==undefined&&a.lv===b.lv&&!a.dead&&!b.dead){a.dead=b.dead=true;
+   const x=(a.position.x+b.position.x)/2,y=(a.position.y+b.position.y)/2,l=a.lv;
+   setTimeout(()=>{if(eng!==me)return;World.remove(eng.world,[a,b]);
+    if(l+1<R.length){const n=mk(l+1,x,y,.3);n.kv=-.12;World.add(eng.world,n);sfx.merge(l+1)}else sfx.fin();
+    add((l+1)*(l+2)*2+(l+1>=R.length?300:0));
+    for(let i=0;i<12;i++)parts.push({x,y,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7-1,t:1})},0)}}});
+}
+function add(n){score+=n;$('sc').textContent=score;if(score>best){best=score;$('bs').textContent=best;ls.set('mb3_best',best)}}
+function clampX(){px=Math.max(WALL+R[cur],Math.min(W-WALL-R[cur],px))}
+function pos(e){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(x){}}if(ac&&ac.state==='suspended')ac.resume();const r=cv.getBoundingClientRect();px=(e.clientX-r.left)/r.width*W;clampX()}
+cv.addEventListener('pointerdown',pos);cv.addEventListener('pointermove',pos);
+cv.addEventListener('pointerup',e=>{pos(e);drop()});
+function drop(){if(over||cool>0)return;const b=mk(cur,px,DROPY,.8);b.kv=-.08;World.add(eng.world,b);sfx.drop();cur=next;next=rnd();cool=32;clampX()}
+$('re').onclick=reset;$('sd').onclick=()=>{snd=!snd;$('sd').textContent=snd?'🔊':'🔇'};
+// ---------- leaderboard (local) ----------
+function submit(){saved=true;if(score<=0)return;const a=ls.get('mb3_board',[]);a.push({n:$('nick').value.trim()||'默认用户',s:score});ls.set('mb3_board',a.slice(-20))}
+function renderLB(){const a=ls.get('mb3_board',[]).slice().sort((x,y)=>y.s-x.s);const L=$('list');
+ if(!a.length){L.innerHTML='<div class="r" style="justify-content:center;color:#a98b78">还没有成绩，快去玩一局吧</div>';return}
+ L.innerHTML=a.map((r,i)=>`<div class="r ${i<3?'r'+(i+1):''}"><i>${i<3?['🥇','🥈','🥉'][i]:i+1}</i><span>${r.n.replace(/[<>&]/g,'')}</span><b>${r.s}</b></div>`).join('')}
+function showLB(){renderLB();$('lbo').style.display='flex'}
+$('tr').onclick=showLB;$('x').onclick=()=>$('lbo').style.display='none';$('rf').onclick=renderLB;
+$('nick').onchange=()=>ls.set('mb3_nick',$('nick').value.trim()||'默认用户');
+// ---------- render ----------
+function stepSpring(b){b.sv+=(1-b.s)*.2;b.sv*=.8;b.s+=b.sv;b.kv+=-b.k*.28;b.kv*=.8;b.k+=b.kv}
+function draw(t){
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+ ctx.fillStyle='#ecd3c0';ctx.fillRect(WALL-3,0,2.5,H);ctx.fillRect(W-WALL+.5,0,2.5,H);
+ ctx.setLineDash([12,9]);ctx.lineWidth=2;ctx.strokeStyle='#eeb0a2';ctx.beginPath();ctx.moveTo(WALL,LINE);ctx.lineTo(W-WALL,LINE);ctx.stroke();
+ if(!over){ctx.lineWidth=1.5;ctx.strokeStyle='#dcbfae';ctx.setLineDash([6,7]);ctx.beginPath();ctx.moveTo(px,DROPY+R[cur]);ctx.lineTo(px,H);ctx.stroke()}
+ ctx.setLineDash([]);
+ ctx.fillStyle='#a98b78';ctx.font='14px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText('下一个',W-60,26);
+ {const s=Math.min(1,20/R[next]);sprite(next,W-30,26,0,s,s)}
+ if(!over&&cool<=0){const br=1+Math.sin(t/260)*.025;ctx.save();ctx.shadowColor='#0003';ctx.shadowBlur=5;ctx.shadowOffsetY=3;sprite(cur,px,DROPY,0,br,2-br);ctx.restore()}
+ for(const b of eng.world.bodies){if(b.lv===undefined)continue;stepSpring(b);
+  ctx.save();ctx.shadowColor='#0003';ctx.shadowBlur=6;ctx.shadowOffsetY=3;sprite(b.lv,b.position.x,b.position.y,b.angle,b.s*(1+b.k),b.s*(1-b.k));ctx.restore()}
+ for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=.1;p.t-=.035;ctx.globalAlpha=Math.max(0,p.t);ctx.fillStyle='#f7c93a';ctx.beginPath();ctx.arc(p.x,p.y,4*p.t+1,0,7);ctx.fill()}
+ ctx.globalAlpha=1;parts=parts.filter(p=>p.t>0);
+}
+function check(dt){const now=performance.now();let lose=false;
+ for(const b of eng.world.bodies){if(b.lv===undefined||b.dead)continue;
+  if(now-b.born>1500&&b.position.y-R[b.lv]<LINE){b.over+=dt;if(b.over>2000)lose=true}else b.over=0}
+ if(lose&&!over){over=true;submit();sfx.end();$('fs').textContent='得分 '+score+'　最高冯添乐爷爷 '+best;$('gov').style.display='flex'}}
+let last=performance.now();
+function loop(t){const dt=Math.min(32,t-last);last=t;if(!over)Engine.update(eng,1000/60,1);if(cool>0)cool--;check(dt);draw(t);requestAnimationFrame(loop)}
+reset();requestAnimationFrame(loop);
+</script></body></html>
